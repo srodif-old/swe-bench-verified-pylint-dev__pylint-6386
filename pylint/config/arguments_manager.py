@@ -32,6 +32,7 @@ from pylint.config.argument import (
     _StoreOldNamesArgument,
     _StoreTrueArgument,
 )
+from pylint.config.callback_actions import _DoNothingAction
 from pylint.config.exceptions import (
     UnrecognizedArgumentAction,
     _UnrecognizedOptionError,
@@ -213,12 +214,23 @@ class _ArgumentsManager:
                 help=argument.help,
             )
         elif isinstance(argument, _CallableArgument):
-            section_group.add_argument(
-                *argument.flags,
-                **argument.kwargs,
-                action=argument.action,
-                help=argument.help,
-            )
+            # For _DoNothingAction (used by options like --verbose), we need nargs=0
+            # to make it a flag that doesn't expect an argument
+            if argument.action is _DoNothingAction:
+                section_group.add_argument(
+                    *argument.flags,
+                    **argument.kwargs,
+                    action=argument.action,
+                    help=argument.help,
+                    nargs=0,
+                )
+            else:
+                section_group.add_argument(
+                    *argument.flags,
+                    **argument.kwargs,
+                    action=argument.action,
+                    help=argument.help,
+                )
         elif isinstance(argument, _ExtendArgument):
             section_group.add_argument(
                 *argument.flags,
