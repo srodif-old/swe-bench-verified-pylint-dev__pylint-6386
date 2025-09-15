@@ -6,7 +6,7 @@ pre-commit~=2.18
 tbump~=6.8.0
 contributors-txt>=0.7.3
 pyenchant~=3.2
-pytest-cov~=3.0
+pytest-cov~=7.0
 pytest-profiling~=1.7
 pytest-xdist~=2.5
 # Type packages for mypy
